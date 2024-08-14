@@ -5,7 +5,7 @@ import (
 	"slices"
 )
 
-// Map
+// Map return a new slice with values applied func f on original slice.
 func Map[S ~[]T, T any, R any](s S, f func(v T) R) []R {
 	if s == nil {
 		return nil
@@ -17,7 +17,7 @@ func Map[S ~[]T, T any, R any](s S, f func(v T) R) []R {
 	return r
 }
 
-// Filter
+// Filter return a new slice with values accepted by func f
 func Filter[S ~[]T, T any](s S, f func(v T) bool) S {
 	if s == nil {
 		return nil

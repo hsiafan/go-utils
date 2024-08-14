@@ -8,7 +8,7 @@ import (
 // UniqMultiMap can hold multi value of one key, the same value only store once
 type UniqMultiMap[K comparable, V comparable] map[K]set.Set[V]
 
-// Add adds new key-value
+// Get returns values for key
 func (m UniqMultiMap[K, V]) Get(k K) set.Set[V] {
 	return m[k]
 }

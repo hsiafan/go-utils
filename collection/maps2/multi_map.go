@@ -5,7 +5,7 @@ import "github.com/hsiafan/go-utils/collection/pair"
 // MultiMap can hold multi value of one key
 type MultiMap[K comparable, V any] map[K][]V
 
-// Add adds new key-value
+// Get gets values for key
 func (m MultiMap[K, V]) Get(k K) []V {
 	return m[k]
 }

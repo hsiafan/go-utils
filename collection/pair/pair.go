@@ -16,12 +16,12 @@ func (p Pair[K, V]) Unpack() (K, V) {
 	return p.key, p.value
 }
 
-// Key return key of pair
+// Key returns key of pair
 func (p Pair[K, V]) Key() K {
 	return p.key
 }
 
-// Get value return value of pair
+// Value returns value of pair
 func (p Pair[K, V]) Value() V {
 	return p.value
 }
