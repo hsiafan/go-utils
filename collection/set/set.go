@@ -18,6 +18,15 @@ func New[T comparable](values ...T) Set[T] {
 	return s
 }
 
+// Collect creates new set from iter.Seq
+func Collect[T comparable](seq iter.Seq[T]) Set[T] {
+	s := Set[T]{}
+	for v := range seq {
+		s[v] = empty{}
+	}
+	return s
+}
+
 // NewWithSize creates new set with expected size.
 // A empty set is allocated with enough space to hold the specified number of elements.
 func NewWithSize[T comparable](size int) Set[T] {

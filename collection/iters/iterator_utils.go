@@ -63,6 +63,38 @@ func Filter[T any](seq iter.Seq[T], predicate func(v T) bool) iter.Seq[T] {
 	}
 }
 
+// Drop returns a sequence containing all elements except first n elements.
+func Drop[T any](seq iter.Seq[T], n int) iter.Seq[T] {
+	return func(yield func(T) bool) {
+		var i int
+		for e := range seq {
+			if i >= n {
+				if !yield(e) {
+					break
+				}
+			}
+			i++
+		}
+	}
+}
+
+// Take returns a sequence containing first n elements.
+func Take[T any](seq iter.Seq[T], n int) iter.Seq[T] {
+	return func(yield func(T) bool) {
+		var i int
+		for e := range seq {
+			if i < n {
+				if !yield(e) {
+					break
+				}
+			} else {
+				break
+			}
+			i++
+		}
+	}
+}
+
 // Indexed returns a new Seq2 with index
 func Indexed[T any](seq iter.Seq[T]) iter.Seq2[int, T] {
 	return func(yield func(int, T) bool) {
