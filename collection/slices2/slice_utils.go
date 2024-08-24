@@ -11,8 +11,8 @@ func Map[S ~[]T, T any, R any](s S, f func(v T) R) []R {
 		return nil
 	}
 	r := make([]R, len(s))
-	for _, v := range s {
-		r = append(r, f(v))
+	for i, v := range s {
+		r[i] = f(v)
 	}
 	return r
 }
