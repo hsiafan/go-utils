@@ -11,7 +11,7 @@ import (
 
 // Marshal encode value as json bytes, with optional MarshalOption.
 // Unlike the json.Marshal, EscapeHTML is disabled by default.
-func Marshal(w io.Writer, v any, options ...MarshalOption) ([]byte, error) {
+func Marshal(v any, options ...MarshalOption) ([]byte, error) {
 	var b bytes.Buffer
 	if err := MarshalTo(&b, v, options...); err != nil {
 		return nil, err
@@ -23,7 +23,7 @@ func Marshal(w io.Writer, v any, options ...MarshalOption) ([]byte, error) {
 
 // MarshalString encode value as json string, with optional MarshalOption.
 // Unlike the json.Marshal, EscapeHTML is disabled by default.
-func MarshalString(w io.Writer, v any, options ...MarshalOption) (string, error) {
+func MarshalString(v any, options ...MarshalOption) (string, error) {
 	var sb strings.Builder
 	if err := MarshalTo(&sb, v, options...); err != nil {
 		return "", err
@@ -58,9 +58,9 @@ func EscapeHTML() MarshalOption {
 }
 
 // IndentWith is a json MarshalOption that sets indent.
-func IndentWith(prefix, indent string) MarshalOption {
+func IndentWith(indent string) MarshalOption {
 	return func(e *json.Encoder) {
-		e.SetIndent(prefix, indent)
+		e.SetIndent("", indent)
 	}
 }
 
