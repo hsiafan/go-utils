@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"strings"
 	"unicode/utf8"
+
+	"github.com/hsiafan/go-utils/internal/reflects"
 )
 
 // Format format a string use python-PEP3101 style, with positional arguments.
@@ -85,9 +87,14 @@ func FormatNamed2(pattern string, values any) string {
 	}
 
 	f := formatter{pattern: pattern}
-	lookup := newStructLookup()
+	lookup := reflects.DefaultStructLookup()
 	s, err := f.formatNamed(func(name string) (any, bool) {
-		return lookup.lookup(rv, name)
+		v, ok := lookup.Field(rv, name)
+		if ok {
+			return v.Interface(), true
+		} else {
+			return nil, false
+		}
 	})
 	if err != nil {
 		panic(err)
