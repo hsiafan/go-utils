@@ -63,6 +63,19 @@ func Filter[T any](seq iter.Seq[T], predicate func(v T) bool) iter.Seq[T] {
 	}
 }
 
+// Filter2 returns a new Seq2 contains the values accepted by predicate
+func Filter2[K, V any](seq iter.Seq2[K, V], predicate func(k K, v V) bool) iter.Seq2[K, V] {
+	return func(yield func(K, V) bool) {
+		for k, v := range seq {
+			if predicate(k, v) {
+				if !yield(k, v) {
+					break
+				}
+			}
+		}
+	}
+}
+
 // Drop returns a sequence containing all elements except first n elements.
 func Drop[T any](seq iter.Seq[T], n int) iter.Seq[T] {
 	return func(yield func(T) bool) {
@@ -78,6 +91,21 @@ func Drop[T any](seq iter.Seq[T], n int) iter.Seq[T] {
 	}
 }
 
+// Drop2 returns a sequence containing all elements except first n elements.
+func Drop2[K, V any](seq iter.Seq2[K, V], n int) iter.Seq2[K, V] {
+	return func(yield func(K, V) bool) {
+		var i int
+		for k, v := range seq {
+			if i >= n {
+				if !yield(k, v) {
+					break
+				}
+			}
+			i++
+		}
+	}
+}
+
 // Take returns a sequence containing first n elements.
 func Take[T any](seq iter.Seq[T], n int) iter.Seq[T] {
 	return func(yield func(T) bool) {
@@ -85,6 +113,23 @@ func Take[T any](seq iter.Seq[T], n int) iter.Seq[T] {
 		for e := range seq {
 			if i < n {
 				if !yield(e) {
+					break
+				}
+			} else {
+				break
+			}
+			i++
+		}
+	}
+}
+
+// Take2 returns a sequence containing first n entries.
+func Take2[K, V any](seq iter.Seq2[K, V], n int) iter.Seq2[K, V] {
+	return func(yield func(K, V) bool) {
+		var i int
+		for k, v := range seq {
+			if i < n {
+				if !yield(k, v) {
 					break
 				}
 			} else {

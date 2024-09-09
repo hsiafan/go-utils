@@ -81,7 +81,7 @@ func (s Set[T]) Copy() Set[T] {
 }
 
 // Values returns all values in Set as a [iter.Seq].
-func (s Set[T]) Values() iter.Seq[T] {
+func (s Set[T]) All() iter.Seq[T] {
 	return func(yield func(T) bool) {
 		for k := range s {
 			if !yield(k) {
@@ -89,6 +89,13 @@ func (s Set[T]) Values() iter.Seq[T] {
 			}
 		}
 	}
+}
+
+// Values returns all values in Set as a [iter.Seq].
+//
+// Deprecated: use [Set.All] instead.
+func (s Set[T]) Values() iter.Seq[T] {
+	return s.All()
 }
 
 // ToSlice return a slice contains the elements in the set
