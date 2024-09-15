@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestStructLookup_GetField(t *testing.T) {
+func TestStructLookup_Field(t *testing.T) {
 
 	v := reflect.ValueOf(mockTestStruct())
 	lookup := DefaultStructLookup()

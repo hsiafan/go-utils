@@ -2,8 +2,21 @@ package slices2
 
 import (
 	"cmp"
+	"iter"
 	"slices"
 )
+
+// CollectWithError collects values in seq to slices. If err occurred, return nil slice and the err.
+func CollectWithError[T any](seq iter.Seq2[T, error]) ([]T, error) {
+	var s []T
+	for v, err := range seq {
+		if err != nil {
+			return nil, err
+		}
+		s = append(s, v)
+	}
+	return s, nil
+}
 
 // Map return a new slice with values applied func f on original slice.
 func Map[S ~[]T, T any, R any](s S, f func(v T) R) []R {

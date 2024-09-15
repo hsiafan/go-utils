@@ -18,13 +18,25 @@ func New[T comparable](values ...T) Set[T] {
 	return s
 }
 
-// Collect creates new set from iter.Seq
+// Collect collects items into a Set.
 func Collect[T comparable](seq iter.Seq[T]) Set[T] {
 	s := Set[T]{}
 	for v := range seq {
 		s[v] = empty{}
 	}
 	return s
+}
+
+// CollectWithError collects items into a Set. If error occurred, return a nil set, and an error.
+func CollectWithError[T comparable](seq iter.Seq2[T, error]) (Set[T], error) {
+	s := Set[T]{}
+	for v, err := range seq {
+		if err != nil {
+			return nil, err
+		}
+		s[v] = empty{}
+	}
+	return s, nil
 }
 
 // NewWithSize creates new set with expected size.

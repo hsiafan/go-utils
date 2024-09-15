@@ -16,7 +16,7 @@ type StructLookup struct {
 // structInfo contains struct meta cache to accelerate the reflect operations.
 type structInfo struct {
 	fields map[string]int // The field name to index map
-	// The embed fields name to index map. It is a many-to-one map.
+	// The embed fields names to index map.
 	// The names is retrieve recursively from all embed type fields;
 	// The values is the indexes for each level' struct field, from the inner to outer.
 	embedFields map[string][]int
