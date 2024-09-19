@@ -74,13 +74,3 @@ func SortStableBy[S ~[]T, T any, O cmp.Ordered](s S, extract func(e T) O) {
 		}
 	})
 }
-
-// Copy copies and return the slice
-func Copy[S ~[]T, T any](s S) S {
-	if s == nil {
-		return nil
-	}
-	ns := make(S, len(s))
-	copy(ns, s)
-	return ns
-}

@@ -9,7 +9,7 @@ import (
 func TestJoiner_Join(t *testing.T) {
 	j := Joiner{Prefix: "[", Suffix: "]", Separator: ","}
 	assert.Equal(t, "[]", j.Join([]string{}))
-	assert.Equal(t, "[1]", j.Join([]string{1}))
+	assert.Equal(t, "[1]", j.Join([]string{"1"}))
 	assert.Equal(t, "[1,2]", j.Join([]string{"1", "2"}))
 
 }
