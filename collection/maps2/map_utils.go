@@ -4,6 +4,27 @@ import (
 	"github.com/hsiafan/go-utils/collection/pair"
 )
 
+// Contains reports if given key exists in the map.
+func Contains[M ~map[K]V, K comparable, V any](m M, k K) bool {
+	_, ok := m[k]
+	return ok
+}
+
+// GetOrElse returns the value for given key; return default value if key is not exists.
+func GetOrElse[M ~map[K]V, K comparable, V any](m M, k K, defaultV V) V {
+	if v, ok := m[k]; ok {
+		return v
+	}
+	return defaultV
+}
+
+// AddMap adds all key-values in map2 into map. If the key-value in m2 already exists in map, it will be override.
+func AddMap[M ~map[K]V, K comparable, V any](m M, another M) {
+	for k, v := range another {
+		m[k] = v
+	}
+}
+
 // AddIfAbsent add key-value to map if key not exists.
 // It returns the value for this key.
 func AddIfAbsent[M ~map[K]V, K comparable, V any](m M, k K, defaultV V) V {
@@ -51,6 +72,22 @@ func Filter[M ~map[K]V, K comparable, V any](m M, k K, predicate func(K, V) bool
 	return rm
 }
 
+// Merge merges all key-value pairs in given maps into one new Map.
+// If key-value exists in multi map, the last key-value will be used.
+func Merge[M ~map[K]V, K comparable, V any](maps ...M) M {
+	var size = 0
+	for _, m := range maps {
+		size += len(m)
+	}
+	nm := make(M, size)
+	for _, m := range maps {
+		for k, v := range m {
+			nm[k] = v
+		}
+	}
+	return nm
+}
+
 // Entries returns a Pair slice contains the key-value items in map.
 func Entries[M ~map[K]V, K comparable, V any](m M) []pair.Pair[K, V] {
 	ps := make([]pair.Pair[K, V], len(m))
@@ -58,16 +95,4 @@ func Entries[M ~map[K]V, K comparable, V any](m M) []pair.Pair[K, V] {
 		ps = append(ps, pair.Of(k, v))
 	}
 	return ps
-}
-
-// Copy copies the map
-func Copy[M ~map[K]V, K comparable, V any](m M) M {
-	if m == nil {
-		return nil
-	}
-	nm := make(M, len(m))
-	for k, v := range m {
-		nm[k] = v
-	}
-	return nm
 }
