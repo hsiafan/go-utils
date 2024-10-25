@@ -74,3 +74,65 @@ func SortStableBy[S ~[]T, T any, O cmp.Ordered](s S, extract func(e T) O) {
 		}
 	})
 }
+
+// FirstN returns the first n elements of the slice.
+// If n is greater than the length of the slice, the original slice is returned.
+func FirstN[T any](s []T, n int) []T {
+	if n <= 0 {
+		return nil
+	}
+	if n >= len(s) {
+		return s
+	}
+	return s[:n]
+}
+
+// LastN returns the last n elements of the slice.
+// If n is greater than the length of the slice, the original slice is returned.
+func LastN[T any](s []T, n int) []T {
+	if n <= 0 {
+		return nil
+	}
+	if n >= len(s) {
+		return s
+	}
+	return s[len(s)-n:]
+}
+
+// First returns the first element of the slice.
+// If the slice is empty, the zero value of the element type is returned.
+func First[T any](s []T) T {
+	if len(s) == 0 {
+		var zero T
+		return zero
+	}
+	return s[0]
+}
+
+// FirstOrElse returns the first element of the slice.
+// If the slice is empty, the defaultValue is returned.
+func FirstOrElse[T any](s []T, defaultValue T) T {
+	if len(s) == 0 {
+		return defaultValue
+	}
+	return s[0]
+}
+
+// Last returns the last element of the slice.
+// If the slice is empty, the zero value of the element type is returned.
+func Last[T any](s []T) T {
+	if len(s) == 0 {
+		var zero T
+		return zero
+	}
+	return s[len(s)-1]
+}
+
+// LastOrElse returns the last element of the slice.
+// If the slice is empty, the defaultValue is returned.
+func LastOrElse[T any](s []T, defaultValue T) T {
+	if len(s) == 0 {
+		return defaultValue
+	}
+	return s[len(s)-1]
+}
