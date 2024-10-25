@@ -47,19 +47,20 @@ func ComputeIfAbsent[M ~map[K]V, K comparable, V any](m M, k K, compute func(K) 
 }
 
 // Map creates a new map, with new values compute by compute func.
-func Map[M ~map[K]V, K comparable, V any, U any](m M, k K, compute func(K, V) U) map[K]U {
+func Map[M ~map[K]V, K comparable, V any, NK comparable, NV any](m M, compute func(K, V) (NK, NV)) map[NK]NV {
 	if m == nil {
 		return nil
 	}
-	rm := make(map[K]U, len(m))
+	nm := make(map[NK]NV, len(m))
 	for k, v := range m {
-		rm[k] = compute(k, v)
+		nk, nv := compute(k, v)
+		nm[nk] = nv
 	}
-	return rm
+	return nm
 }
 
 // Filter creates a new map with new values accept by predicate func.
-func Filter[M ~map[K]V, K comparable, V any](m M, k K, predicate func(K, V) bool) map[K]V {
+func Filter[M ~map[K]V, K comparable, V any](m M, predicate func(K, V) bool) map[K]V {
 	if m == nil {
 		return nil
 	}
