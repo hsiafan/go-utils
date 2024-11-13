@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
+	"reflect"
 	"strings"
 
 	"github.com/hsiafan/go-utils/strings2"
@@ -64,7 +65,47 @@ func IndentWith(indent string) MarshalOption {
 	}
 }
 
-// UnmarshalString is like json.Unmarshal, but takes a string as input.
-func UnmarshalString(s string, v any) error {
-	return json.Unmarshal(strings2.AsBytes(s), v)
+// Unmarshal decode json bytes to value of type T. If T is a pointer, a new instance of T is created and returned.
+// If the data is not a valid json, an error is returned.
+func Unmarshal[T any](data []byte) (T, error) {
+	var v T
+	t := reflect.TypeOf(v)
+	if t != nil && t.Kind() == reflect.Ptr {
+		v = reflect.New(t.Elem()).Interface().(T)
+		err := json.Unmarshal(data, v)
+		return v, err
+	} else {
+		err := json.Unmarshal(data, &v)
+		return v, err
+	}
+}
+
+// Unmarshal decode json string to value of type T. If T is a pointer, a new instance of T is created and returned.
+// If the data is not a valid json, an error is returned.
+func UnmarshalString[T any](s string) (T, error) {
+	var v T
+	t := reflect.TypeOf(v)
+	if t != nil && t.Kind() == reflect.Ptr {
+		v = reflect.New(t.Elem()).Interface().(T)
+		err := json.Unmarshal(strings2.AsBytes(s), v)
+		return v, err
+	} else {
+		err := json.Unmarshal(strings2.AsBytes(s), &v)
+		return v, err
+	}
+}
+
+// Unmarshal decode json data from a reader to value of type T. If T is a pointer, a new instance of T is created and returned.
+// If the data is not a valid json, an error is returned.
+func UnmarshalReader[T any](r io.Reader) (T, error) {
+	var v T
+	t := reflect.TypeOf(v)
+	if t != nil && t.Kind() == reflect.Ptr {
+		v = reflect.New(t.Elem()).Interface().(T)
+		err := json.NewDecoder(r).Decode(v)
+		return v, err
+	} else {
+		err := json.NewDecoder(r).Decode(&v)
+		return v, err
+	}
 }
