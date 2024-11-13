@@ -18,8 +18,8 @@ func CollectWithError[T any](seq iter.Seq2[T, error]) ([]T, error) {
 	return s, nil
 }
 
-// Map return a new slice with values applied func f on original slice.
-func Map[S ~[]T, T any, R any](s S, f func(v T) R) []R {
+// Convert return a new slice with values applied func f on original slice.
+func Convert[S ~[]T, T any, R any](s S, f func(v T) R) []R {
 	if s == nil {
 		return nil
 	}

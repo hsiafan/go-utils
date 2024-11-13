@@ -46,8 +46,8 @@ func ComputeIfAbsent[M ~map[K]V, K comparable, V any](m M, k K, compute func(K) 
 	return v
 }
 
-// Map creates a new map, with new values compute by compute func.
-func Map[M ~map[K]V, K comparable, V any, NK comparable, NV any](m M, compute func(K, V) (NK, NV)) map[NK]NV {
+// Convert creates a new map, with new values compute by compute func.
+func Convert[M ~map[K]V, K comparable, V any, NK comparable, NV any](m M, compute func(K, V) (NK, NV)) map[NK]NV {
 	if m == nil {
 		return nil
 	}
