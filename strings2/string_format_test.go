@@ -27,23 +27,6 @@ func TestFormatNamed(t *testing.T) {
 	assert.Equal(t, "jack, 16", FormatNamed("{name}, {age}", values))
 }
 
-func TestFormatNamed2(t *testing.T) {
-	type inner struct {
-		male bool
-	}
-
-	values := struct {
-		inner
-		Name string
-		Age  int
-	}{
-		Name: "jack",
-		Age:  16,
-	}
-	assert.Equal(t, "jack, 16, false", FormatNamed2("{Name}, {Age}, {male}", values))
-	assert.Equal(t, "jack, 16, false", FormatNamed2("{Name}, {Age}, {male}", &values))
-}
-
 func Test_formatter_parsePattern(t *testing.T) {
 	cases := []struct {
 		pattern string

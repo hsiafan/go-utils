@@ -3,12 +3,9 @@ package strings2
 import (
 	"errors"
 	"fmt"
-	"reflect"
 	"strconv"
 	"strings"
 	"unicode/utf8"
-
-	"github.com/hsiafan/go-utils/internal/reflects"
 )
 
 // Format format a string use python-PEP3101 style, with positional arguments.
@@ -61,40 +58,11 @@ func Format(pattern string, values ...any) string {
 // FormatNamed format a string use python-PEP3101 style, with name-value arguments.
 //
 // For the format specifier, see [Format].
-func FormatNamed[V any](pattern string, values map[string]V) string {
+func FormatNamed[V any, M ~map[string]V](pattern string, values M) string {
 	f := formatter{pattern: pattern}
 	s, err := f.formatNamed(func(name string) (any, bool) {
 		v, ok := values[name]
 		return v, ok
-	})
-	if err != nil {
-		panic(err)
-	}
-	return s
-}
-
-// FormatNamed format a string use python-PEP3101 style, with name-value arguments.
-// The values must be a struct, or a pointer to struct.
-//
-// For the format specifier, see [Format].
-func FormatNamed2(pattern string, values any) string {
-	rv := reflect.ValueOf(values)
-	if rv.Kind() == reflect.Pointer {
-		rv = rv.Elem()
-	}
-	if rv.Kind() != reflect.Struct {
-		panic(errors.New("values must be map[string]any or struct"))
-	}
-
-	f := formatter{pattern: pattern}
-	lookup := reflects.DefaultStructLookup()
-	s, err := f.formatNamed(func(name string) (any, bool) {
-		v, ok := lookup.Field(rv, name)
-		if ok {
-			return v.Interface(), true
-		} else {
-			return nil, false
-		}
 	})
 	if err != nil {
 		panic(err)
