@@ -64,8 +64,8 @@ func (s Set[T]) AddAll(values ...T) {
 	}
 }
 
-// Extend adds all values to set
-func (s Set[T]) Extend(s2 Set[T]) {
+// AddSet adds all values to set
+func (s Set[T]) AddSet(s2 Set[T]) {
 	for v := range s2 {
 		s[v] = empty{}
 	}
@@ -127,8 +127,8 @@ func (s Set[T]) Size() int {
 // Union returns a new set contains elements in one of sets.
 func (s Set[T]) Union(s2 Set[T]) Set[T] {
 	r := make(Set[T])
-	r.Extend(s)
-	r.Extend(s2)
+	r.AddSet(s)
+	r.AddSet(s2)
 	return s
 }
 
