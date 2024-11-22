@@ -76,8 +76,8 @@ func Filter2[K, V any](seq iter.Seq2[K, V], predicate func(k K, v V) bool) iter.
 	}
 }
 
-// Drop returns a sequence containing all elements except first n elements.
-func Drop[T any](seq iter.Seq[T], n int) iter.Seq[T] {
+// Skip returns a sequence containing all elements except first n elements.
+func Skip[T any](seq iter.Seq[T], n int) iter.Seq[T] {
 	return func(yield func(T) bool) {
 		var i int
 		for e := range seq {
@@ -91,8 +91,8 @@ func Drop[T any](seq iter.Seq[T], n int) iter.Seq[T] {
 	}
 }
 
-// Drop2 returns a sequence containing all elements except first n elements.
-func Drop2[K, V any](seq iter.Seq2[K, V], n int) iter.Seq2[K, V] {
+// Skip2 returns a sequence containing all elements except first n elements.
+func Skip2[K, V any](seq iter.Seq2[K, V], n int) iter.Seq2[K, V] {
 	return func(yield func(K, V) bool) {
 		var i int
 		for k, v := range seq {
