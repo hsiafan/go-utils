@@ -75,28 +75,51 @@ func SortStableBy[S ~[]T, T any, O cmp.Ordered](s S, extract func(e T) O) {
 	})
 }
 
-// FirstN returns the first n elements of the slice.
-// If n is greater than the length of the slice, the original slice is returned.
-func FirstN[T any](s []T, n int) []T {
-	if n <= 0 {
-		return nil
+// Slice return a part of a slice. It treat start and end index likes python list slice and js array slice,
+// the negative index counts back from the end of the slice. It is safe, never panics.
+//
+// For start:
+//   - If start is negative, -len(s) < start < 0, start + len(s) is used.
+//   - if start < -len(s), 0 is used.
+//   - If start > len(s), len(s) is used.
+//
+// For end:
+//   - If end is negative, -len(s) < end < 0, end + len(s) is used.
+//   - if end < -len(s), 0 is used.
+//   - If end > len(s), len(s) is used.
+//
+// If end implies a position before or at the position that start implies, an empty slice is returned.
+func Slice[S ~[]T, T any](s S, start, end int) S {
+	if start < 0 {
+		if start > -len(s) {
+			start += len(s)
+		} else {
+			start = 0
+		}
+	} else if start > len(s) {
+		start = len(s)
 	}
-	if n >= len(s) {
-		return s
+
+	if end < 0 {
+		if end > -len(s) {
+			end += len(s)
+		} else {
+			end = 0
+		}
+	} else if end > len(s) {
+		end = len(s)
 	}
-	return s[:n]
+
+	if start > end {
+		start = end
+	}
+
+	return s[start:end]
 }
 
-// LastN returns the last n elements of the slice.
-// If n is greater than the length of the slice, the original slice is returned.
-func LastN[T any](s []T, n int) []T {
-	if n <= 0 {
-		return nil
-	}
-	if n >= len(s) {
-		return s
-	}
-	return s[len(s)-n:]
+// SliceToEnd likes Slice, but without the end index. The len(s) is used as the end index.
+func SliceToEnd[S ~[]T, T any](s S, start int) S {
+	return Slice(s, start, len(s))
 }
 
 // First returns the first element of the slice.

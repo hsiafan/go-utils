@@ -34,3 +34,14 @@ func TestSortStableBy(t *testing.T) {
 		pair.Of("3", 3),
 	}, pairs)
 }
+
+func TestSlice(t *testing.T) {
+	s := []int{1, 2, 3}
+	assert.Equal(t, []int{1}, Slice(s, 0, 1))
+	assert.Equal(t, []int{1, 2}, Slice(s, 0, -1))
+	assert.Equal(t, []int{2}, Slice(s, -2, -1))
+	assert.Equal(t, []int{1}, Slice(s, -5, 1))
+	assert.Equal(t, []int{1}, Slice(s, -5, 1))
+	assert.Equal(t, []int{2, 3}, Slice(s, 1, 100))
+	assert.Equal(t, []int{}, Slice(s, 5, 2))
+}
