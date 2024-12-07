@@ -159,3 +159,31 @@ func LastOrElse[T any](s []T, defaultValue T) T {
 	}
 	return s[len(s)-1]
 }
+
+// LastN returns a slice contains the last N elements of given slice. If the given slice has less elements than N,
+// then the returned slice contains all the element. If the given count N is negative, a empty slice will be returned.
+// Note that the new slice is a sub part of given slice.
+func LastN[S ~[]T, T any](s S, count int) S {
+	if count < 0 {
+		count = 0
+	}
+	if len(s) < count {
+		return s
+	} else {
+		return s[len(s)-count:]
+	}
+}
+
+// FirstN returns a slice contains the first N elements of given slice. If the given slice has less elements than N,
+// then the returned slice contains all the element. If the given count N is negative, a empty slice will be returned.
+// Note that the new slice is a sub part of given slice.
+func FirstN[S ~[]T, T any](s S, count int) S {
+	if count < 0 {
+		count = 0
+	}
+	if len(s) < count {
+		return s
+	} else {
+		return s[:count]
+	}
+}

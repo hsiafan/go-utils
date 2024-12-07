@@ -45,3 +45,17 @@ func TestSlice(t *testing.T) {
 	assert.Equal(t, []int{2, 3}, Slice(s, 1, 100))
 	assert.Equal(t, []int{}, Slice(s, 5, 2))
 }
+
+func TestLastN(t *testing.T) {
+	s := []int{1, 2, 3}
+	assert.Equal(t, []int{3}, LastN(s, 1))
+	assert.Equal(t, []int{1, 2, 3}, LastN(s, 4))
+	assert.Equal(t, []int{}, LastN(s, -1))
+}
+
+func TestFirstN(t *testing.T) {
+	s := []int{1, 2, 3}
+	assert.Equal(t, []int{1}, FirstN(s, 1))
+	assert.Equal(t, []int{1, 2, 3}, FirstN(s, 4))
+	assert.Equal(t, []int{}, FirstN(s, -1))
+}
