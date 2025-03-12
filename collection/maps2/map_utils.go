@@ -1,6 +1,8 @@
 package maps2
 
 import (
+	"maps"
+
 	"github.com/hsiafan/go-utils/collection/pair"
 )
 
@@ -20,9 +22,7 @@ func GetOrElse[M ~map[K]V, K comparable, V any](m M, k K, defaultV V) V {
 
 // AddMap adds all key-values in map2 into map. If the key-value in m2 already exists in map, it will be override.
 func AddMap[M ~map[K]V, K comparable, V any](m M, another M) {
-	for k, v := range another {
-		m[k] = v
-	}
+	maps.Copy(m, another)
 }
 
 // AddIfAbsent add key-value to map if key not exists.

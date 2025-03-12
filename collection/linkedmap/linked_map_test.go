@@ -10,7 +10,7 @@ import (
 func TestLinkedMap_PutAndRemove(t *testing.T) {
 	m := New[string, int]()
 	m.Put("1", 1)
-	value, ok := m.Get("1")
+	value, ok := m.Get("1").Unwrap()
 	assert.True(t, ok)
 	assert.Equal(t, 1, value)
 

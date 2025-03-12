@@ -4,6 +4,8 @@ import (
 	"cmp"
 	"iter"
 	"slices"
+
+	"github.com/hsiafan/go-utils/lang/optional"
 )
 
 // CollectWithError collects values in seq to slices. If err occurred, return nil slice and the err.
@@ -123,41 +125,21 @@ func SliceToEnd[S ~[]T, T any](s S, start int) S {
 }
 
 // First returns the first element of the slice.
-// If the slice is empty, the zero value of the element type is returned.
-func First[T any](s []T) T {
+// It returns an optional value, if the slice is empty, the optional is empty.
+func First[T any](s []T) optional.Optional[T] {
 	if len(s) == 0 {
-		var zero T
-		return zero
+		return optional.Empty[T]()
 	}
-	return s[0]
-}
-
-// FirstOrElse returns the first element of the slice.
-// If the slice is empty, the defaultValue is returned.
-func FirstOrElse[T any](s []T, defaultValue T) T {
-	if len(s) == 0 {
-		return defaultValue
-	}
-	return s[0]
+	return optional.OfValue(s[0])
 }
 
 // Last returns the last element of the slice.
-// If the slice is empty, the zero value of the element type is returned.
-func Last[T any](s []T) T {
+// It returns an optional value, if the slice is empty, the optional is empty.
+func Last[T any](s []T) optional.Optional[T] {
 	if len(s) == 0 {
-		var zero T
-		return zero
+		return optional.Empty[T]()
 	}
-	return s[len(s)-1]
-}
-
-// LastOrElse returns the last element of the slice.
-// If the slice is empty, the defaultValue is returned.
-func LastOrElse[T any](s []T, defaultValue T) T {
-	if len(s) == 0 {
-		return defaultValue
-	}
-	return s[len(s)-1]
+	return optional.OfValue(s[len(s)-1])
 }
 
 // LastN returns a slice contains the last N elements of given slice. If the given slice has less elements than N,

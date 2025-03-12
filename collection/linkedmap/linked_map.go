@@ -1,6 +1,10 @@
 package linkedmap
 
-import "iter"
+import (
+	"iter"
+
+	"github.com/hsiafan/go-utils/lang/optional"
+)
 
 // node is one linked list node
 type node[K comparable, V any] struct {
@@ -29,20 +33,9 @@ func (m *Map[K, V]) Contains(k K) bool {
 }
 
 // Get returns value for key.
-func (m *Map[K, V]) Get(k K) (v V, ok bool) {
-	if n, ok := m.m[k]; ok {
-		return n.v, true
-	}
-	return
-}
-
-// GetOrZero returns value for key; return zero value if key is not exists.
-func (m *Map[K, V]) GetOrZero(k K) V {
-	if n, ok := m.m[k]; ok {
-		return n.v
-	}
-	var zero V
-	return zero
+func (m *Map[K, V]) Get(k K) optional.Optional[V] {
+	n, ok := m.m[k]
+	return optional.Of(n.v, ok)
 }
 
 // Put adds or sets value for key.
