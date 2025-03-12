@@ -41,7 +41,7 @@ func Lines(path string) iter.Seq2[string, error] {
 		scanner := bufio.NewScanner(f)
 		for scanner.Scan() {
 			if !yield(scanner.Text(), nil) {
-				break
+				return
 			}
 		}
 		if err := scanner.Err(); err != nil {

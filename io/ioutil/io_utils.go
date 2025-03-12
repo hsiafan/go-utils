@@ -1,4 +1,4 @@
-package ioutils
+package ioutil
 
 import (
 	"bufio"
@@ -17,7 +17,7 @@ func Lines(r io.Reader) iter.Seq2[string, error] {
 		scanner := bufio.NewScanner(r)
 		for scanner.Scan() {
 			if !yield(scanner.Text(), nil) {
-				break
+				return
 			}
 		}
 		if err := scanner.Err(); err != nil {
