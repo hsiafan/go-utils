@@ -1,4 +1,4 @@
-package maps2
+package linkedmap
 
 import (
 	"slices"
@@ -8,7 +8,7 @@ import (
 )
 
 func TestLinkedMap_PutAndRemove(t *testing.T) {
-	m := NewLinkedMap[string, int]()
+	m := New[string, int]()
 	m.Put("1", 1)
 	value, ok := m.Get("1")
 	assert.True(t, ok)
@@ -26,7 +26,7 @@ func TestLinkedMap_PutAndRemove(t *testing.T) {
 }
 
 func TestLinkedMap_Copy(t *testing.T) {
-	m := NewLinkedMap[string, int]()
+	m := New[string, int]()
 	m.Put("1", 1)
 	m.Put("2", 2)
 	m.Put("3", 3)
@@ -38,7 +38,7 @@ func TestLinkedMap_Copy(t *testing.T) {
 }
 
 func TestLinkedMap_All(t *testing.T) {
-	m := NewLinkedMap[string, int]()
+	m := New[string, int]()
 	m.Put("1", 1)
 	m.Put("2", 2)
 	m.Put("3", 3)
@@ -48,7 +48,7 @@ func TestLinkedMap_All(t *testing.T) {
 }
 
 func TestLinkedMap_Clear(t *testing.T) {
-	m := NewLinkedMap[string, int]()
+	m := New[string, int]()
 	m.Put("1", 1)
 	m.Put("2", 2)
 

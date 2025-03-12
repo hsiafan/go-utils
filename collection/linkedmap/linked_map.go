@@ -1,4 +1,4 @@
-package maps2
+package linkedmap
 
 import "iter"
 
@@ -10,26 +10,26 @@ type node[K comparable, V any] struct {
 	next *node[K, V]
 }
 
-// LinkedMap is a map with nodes maintained by a linked list, it can keep the order of keys.
-type LinkedMap[K comparable, V any] struct {
+// Map is a map with nodes maintained by a linked list, it can keep the order of keys.
+type Map[K comparable, V any] struct {
 	m    map[K]*node[K, V]
 	head *node[K, V]
 	tail *node[K, V]
 }
 
-// NewLinkedMap creates a new LinkedMap.
-func NewLinkedMap[K comparable, V any]() *LinkedMap[K, V] {
-	return &LinkedMap[K, V]{m: make(map[K]*node[K, V])}
+// New creates a new LinkedMap.
+func New[K comparable, V any]() *Map[K, V] {
+	return &Map[K, V]{m: make(map[K]*node[K, V])}
 }
 
 // Contains returns true if key exists.
-func (m *LinkedMap[K, V]) Contains(k K) bool {
+func (m *Map[K, V]) Contains(k K) bool {
 	_, ok := m.m[k]
 	return ok
 }
 
 // Get returns value for key.
-func (m *LinkedMap[K, V]) Get(k K) (v V, ok bool) {
+func (m *Map[K, V]) Get(k K) (v V, ok bool) {
 	if n, ok := m.m[k]; ok {
 		return n.v, true
 	}
@@ -37,7 +37,7 @@ func (m *LinkedMap[K, V]) Get(k K) (v V, ok bool) {
 }
 
 // GetOrZero returns value for key; return zero value if key is not exists.
-func (m *LinkedMap[K, V]) GetOrZero(k K) V {
+func (m *Map[K, V]) GetOrZero(k K) V {
 	if n, ok := m.m[k]; ok {
 		return n.v
 	}
@@ -46,7 +46,7 @@ func (m *LinkedMap[K, V]) GetOrZero(k K) V {
 }
 
 // Put adds or sets value for key.
-func (m *LinkedMap[K, V]) Put(k K, v V) {
+func (m *Map[K, V]) Put(k K, v V) {
 	if n, ok := m.m[k]; ok {
 		n.v = v
 		return
@@ -57,13 +57,13 @@ func (m *LinkedMap[K, V]) Put(k K, v V) {
 }
 
 // PutMap adds/sets all key-values in another map.
-func (m *LinkedMap[K, V]) PutMap(another LinkedMap[K, V]) {
+func (m *Map[K, V]) PutMap(another Map[K, V]) {
 	for n := another.head; n != nil; n = n.next {
 		m.Put(n.k, n.v)
 	}
 }
 
-func (m *LinkedMap[K, V]) insertNode(n *node[K, V]) {
+func (m *Map[K, V]) insertNode(n *node[K, V]) {
 	if m.head == nil {
 		m.head = n
 		m.tail = n
@@ -75,7 +75,7 @@ func (m *LinkedMap[K, V]) insertNode(n *node[K, V]) {
 }
 
 // Remove removes key.
-func (m *LinkedMap[K, V]) Remove(k K) {
+func (m *Map[K, V]) Remove(k K) {
 	if n, ok := m.m[k]; ok {
 		m.removeNode(n)
 		delete(m.m, k)
@@ -83,13 +83,13 @@ func (m *LinkedMap[K, V]) Remove(k K) {
 }
 
 // RemoveAll removes all keys.
-func (m *LinkedMap[K, V]) RemoveAll(keys ...K) {
+func (m *Map[K, V]) RemoveAll(keys ...K) {
 	for _, k := range keys {
 		m.Remove(k)
 	}
 }
 
-func (m *LinkedMap[K, V]) removeNode(n *node[K, V]) {
+func (m *Map[K, V]) removeNode(n *node[K, V]) {
 	if n.prev == nil {
 		m.head = n.next
 	} else {
@@ -103,8 +103,8 @@ func (m *LinkedMap[K, V]) removeNode(n *node[K, V]) {
 }
 
 // Copy returns a new LinkedMap with same key-values.
-func (m *LinkedMap[K, V]) Copy() *LinkedMap[K, V] {
-	nm := NewLinkedMap[K, V]()
+func (m *Map[K, V]) Copy() *Map[K, V] {
+	nm := New[K, V]()
 	for n := m.head; n != nil; n = n.next {
 		nm.Put(n.k, n.v)
 	}
@@ -113,7 +113,7 @@ func (m *LinkedMap[K, V]) Copy() *LinkedMap[K, V] {
 
 // All returns all key-value pairs as a sequence.
 // The order of key-value pairs is the same as they were added to map.
-func (m *LinkedMap[K, V]) All() iter.Seq2[K, V] {
+func (m *Map[K, V]) All() iter.Seq2[K, V] {
 	return func(yield func(K, V) bool) {
 		for n := m.head; n != nil; n = n.next {
 			if !yield(n.k, n.v) {
@@ -125,7 +125,7 @@ func (m *LinkedMap[K, V]) All() iter.Seq2[K, V] {
 
 // Keys returns all keys as a sequence.
 // The order of keys is the same as they were added to map.
-func (m *LinkedMap[K, V]) Keys() iter.Seq[K] {
+func (m *Map[K, V]) Keys() iter.Seq[K] {
 	return func(yield func(K) bool) {
 		for n := m.head; n != nil; n = n.next {
 			if !yield(n.k) {
@@ -137,7 +137,7 @@ func (m *LinkedMap[K, V]) Keys() iter.Seq[K] {
 
 // Values returns all values as a sequence.
 // The order of values is the same as key-values pairs were added to map.
-func (m *LinkedMap[K, V]) Values() iter.Seq[V] {
+func (m *Map[K, V]) Values() iter.Seq[V] {
 	return func(yield func(V) bool) {
 		for n := m.head; n != nil; n = n.next {
 			if !yield(n.v) {
@@ -148,12 +148,12 @@ func (m *LinkedMap[K, V]) Values() iter.Seq[V] {
 }
 
 // Size returns the size of the map.
-func (m *LinkedMap[K, V]) Size() int {
+func (m *Map[K, V]) Size() int {
 	return len(m.m)
 }
 
 // Clear clears the map.
-func (m *LinkedMap[K, V]) Clear() {
+func (m *Map[K, V]) Clear() {
 	clear(m.m)
 	m.head = nil
 	m.tail = nil
